@@ -1,0 +1,27 @@
+version: '3'
+services:
+  api:
+    image: peterccliu/beiss # switch to build: later
+    ports:
+      - "3000"
+    depends_on:
+      - mongo
+    networks:
+      - beissNetwork
+
+  ui:
+    image: peterccliu/beiss-ui
+    ports:
+      - "8000"
+    networks:
+      - beissNetwork
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017"
+    networks:
+      - beissNetwork
+
+networks:
+  beissNetwork:
