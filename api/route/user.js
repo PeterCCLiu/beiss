@@ -9,10 +9,10 @@ router.post('/new', (req, res) => {
     res.send("new user");
 })
 
-app.get('/:getDeviceByUserId', (req, res) => {
-    console.log(req.params.info);
-    // const request = JSON.stringify(req.params);
-    res.send("Device Information");
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    res.send("Device Information " + id);
 })
 
 module.exports = router
