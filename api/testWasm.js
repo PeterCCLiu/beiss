@@ -1,8 +1,8 @@
+const fs = require('fs')
 function loadWebAssembly(fileName) {
-    return fetch(fileName)
-        .then(response => response.arrayBuffer())
-        .then(buffer => WebAssembly.compile(buffer))
-        .then(module => {return new WebAssembly.Instance(module)})
+    let wasmBuffer = fs.readFileSync(fileName);
+    let mod =  WebAssembly.instantiate(wasmBuffer);
+    return mod
 }
 
 module.exports = { loadWebAssembly }
