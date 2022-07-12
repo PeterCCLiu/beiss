@@ -29,8 +29,10 @@ Therefore we compile *.c &rarr; *.wasm &rarr; JS module.
 - WebAssembly: *.wasm &rarr; JS module (runtime async)
 
 ## Known issues:
--[_Looking at it_] In local testing, `fetch` a local *.wasm file is prohibited and will cause a CORS error that looks like this:
+-[_fixed_] In local testing, `fetch` a local *.wasm file is prohibited and will cause a CORS error that looks like this:
 ```
 TypeError [ERR_INVALID_URL]: Invalid URL
 ```
 This is due to security concerns and is caused by Chrome. See [this link](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSRequestNotHttp) and [this](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server) for solution.
+
+Fix: See [commit](cd13ddc97e45cbf223b509ec1c5580ccceaebd0f)
