@@ -14,12 +14,19 @@ TODOS:
   - `dockerfile` 
     - brew install: LLVM, wasm2wat
   - docker image registry and publish
+- GitHub actions for continuous CI/CD
 - mongo:
-  - Define schema, collection, db
-  - CRUD
+  - Define _necessary_ schema, collection, db
+  - Implement CRUD
 - frontend:
   - HTML boilerplate, CSS
   - React (use template)
+- IoT SDK
+  - Partial Key Gen Part 2, in c. file
+- Docs
+  - Docs for crypto use, gcc compile, .wasm file import, so on.
+- Blockchain 
+  - Ropsten 
 
 ## Other Dependencies:
 This project (inevitably) uses C/C++ code. 

@@ -1,5 +1,7 @@
-parkg: PartialKeyGen.c
-	gcc PartialKeyGen.c -o parkg
+playground: Makefile playground.c
+	gcc playground.c -lpbc -lgmp -o playground
+# parkg: PartialKeyGen.c
+	# gcc PartialKeyGen.c -o parkg
 #example: test.c
 #	gcc test.c -o test
 # CXX := clang
