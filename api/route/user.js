@@ -1,18 +1,28 @@
 const express = require('express')
+const {User} = require('../dbOperations')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    res.send("user lists");
+    User.find({}, (err, result) =>{
+        res.send(result)
+    })
 })
 
 router.post('/new', (req, res) => {
-    res.send("new user");
+    let newUser = new User(req.body)
+    newUser.save(err => {
+        if (err) {
+            console.log(err)
+            res.send({success:false})
+        }
+        res.send({success:true})
+    })
 })
 
 router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    console.log(id);
-    res.send("Device Information " + id);
+    User.find({id: req.params.id}, (err, result) =>{
+        res.send(result)
+    })
 })
 
 module.exports = router
