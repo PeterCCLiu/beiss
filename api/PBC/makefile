@@ -1,16 +1,7 @@
-playground: Makefile playground.c
-	gcc playground.c -lpbc -lgmp -o playground
-# parkg: PartialKeyGen.c
-	# gcc PartialKeyGen.c -o parkg
-#example: test.c
-#	gcc test.c -o test
-# CXX := clang
-# LLVMLDFLAGS := --target=wasm32 -nostdlib -Wl,--no-entry
-# SOURCES = add.c
-# OBJECTS = $(SOURCES:.c=.wasm32)
-#
-# adder: adder.c
-#     $(CXX) $(LLVMLDFLAGS) -o $(SOURCES)
-#adder: adder.c
-# clang --target=wasm32 -nostdlib -Wl,--no-entry -o adder.wasm adder.c
-# this file is still a fake. Pending to translate below to a correct makefile.
+test: Makefile Extract-Partial-Private-Key.c
+	-rm -rf test params.txt
+	gcc -o test Extract-Partial-Private-Key.c setup.c -lpbc -lgmp -lcrypto
+clean:
+	-rm -rf test pairing_params.txt
+#playground: Makefile playground.c
+#	gcc playground.c -lpbc -lgmp -o playground
