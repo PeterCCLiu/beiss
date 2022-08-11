@@ -22,4 +22,12 @@ What now?
 
 What next?
 
-- I am implementing certless signature.
+- I am implementing certificateless cryptosystem according to [Boneh-Franklin03](https://crypto.stanford.edu/~dabo/papers/bfibe.pdf) IBE Signature and [Al-Riyami-Patterson03](https://eprint.iacr.org/2003/126.pdf) certificateless cryptosystem.
+
+Status?
+- Server-side crypto OK: KGC setup, partial-private-key extract, some tests, completed.
+
+Next?
+- IoT side crypto: other half generation, secure transmission (SSL/TLS), registration to KGC/blockchain. 
+- Deployment to cloud of choice. mongo and blockchain stuff
+- Docs
