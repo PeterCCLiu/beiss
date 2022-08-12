@@ -1,13 +1,28 @@
-// const mongo = require('mongoose')
-const { MongoClient } = require('mongodb')
-const dbUrl = 'mongodb://localhost:27017';
+const mongoose = require('mongoose')
+
+const hostName = "mongo";
+const port = "27017";
+const dbName = 'beiss';
+
+const dbUrl = `mongodb://${hostName}:${port}/${dbName}`;
 
 async function dbStart(){
-    const db = new MongoClient(dbUrl);
-    await db.connect().then(r => {
+    await mongoose.connect(dbUrl).then(r => {
         console.log("db connection status: " + r);
         // have your mongo running in local terminal :27017
     })
 }
 
-module.exports = { dbStart }
+const deviceSchema = mongoose.Schema({
+    id: String
+});
+
+const userSchema = mongoose.Schema({
+    id: String,
+    name: String
+});
+
+const Device = mongoose.model('Device', deviceSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = { dbStart, Device, User }

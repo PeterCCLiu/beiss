@@ -1,9 +1,15 @@
 const express = require('express');
-const app = express();
+const multipart = require('connect-multiparty');
+const bodyParser = require('body-parser')
 const {dbStart} = require('./dbOperations');
 const userRouter = require('./route/user');
 const deviceRouter = require('./route/device');
 const {loadWebAssembly} = require('./testWasm');
+
+const app = express();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(multipart());
 
 let adder;
 let result;
@@ -34,7 +40,9 @@ app.get('/testWasm', (req, res) => {
         })
 })
 
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 app.use('/device', deviceRouter);
 
-app.listen(3000, "localhost");
+app.listen(4000, function () {
+    console.log('server started')
+});
