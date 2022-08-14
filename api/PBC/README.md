@@ -31,3 +31,4 @@ Next?
 - IoT side crypto: other half generation, secure transmission (SSL/TLS), registration to KGC/blockchain. 
 - Deployment to cloud of choice. mongo and blockchain stuff
 - Docs
+- Unit tests and integration tests
