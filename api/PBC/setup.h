@@ -27,6 +27,7 @@
 pairing_t p;
 pbc_param_t par;
 char * par_param_buffer;
+char * public_param_transmission_buffer; // struct params param in byte buffer
 element_t g; // generator, also is P in Al-Riyami-Patterson03 paper
 element_t masterPublicKey, masterPrivateKey; // master priv/pub key
 element_t P0; // P0
@@ -43,7 +44,9 @@ struct params {
 
 void setup();
 void init_global_public_params();
+void set_public_param_transmission_struct();
 void set_public_param_transmission_buffer();
+void get_public_param_transmission_buffer();
 void setup_with_param_buffer(char * par_param_buffer, int len);
 void init_test();
 void FreeElements(pairing_t p);

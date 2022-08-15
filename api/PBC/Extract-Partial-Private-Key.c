@@ -292,7 +292,7 @@ int Verify(pairing_t p, char ** sig, char ** DevicePublicKey, char * message, ch
 
     element_mul(r, result1, result3);
 
-    char * hash = string_times_G2_to_Zr_SHA256(message, r);
+    char * hash = string_times_G2_to_Zr_SHA256((const unsigned char *) message, r);
 
     element_t v_canonical;
     element_init_Zr(v_canonical, p);
@@ -310,12 +310,13 @@ int Verify(pairing_t p, char ** sig, char ** DevicePublicKey, char * message, ch
 
 int main(){
 
-    setup();
+    setup(); // for KGC
 
 //    pairing_clear(p);
 
+    // for iot, only test when pairing_params.txt exist and NOT make clean
 //    par_param_buffer = extract_pairing_param_buffer_from_file();
-//    setup_with_param_buffer(p, par_param_buffer, PARAM_BUFFER_LENGTH_TYPE_A);
+//    setup_with_param_buffer(par_param_buffer, PARAM_BUFFER_LENGTH_TYPE_A);
 
     init_test();
 

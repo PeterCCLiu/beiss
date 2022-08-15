@@ -29,7 +29,7 @@ void setup(){
 
     par_param_buffer = extract_pairing_param_buffer_from_file();
     init_global_public_params();
-    set_public_param_transmission_buffer();
+    set_public_param_transmission_struct();
 
     return;
 }
@@ -53,7 +53,7 @@ void init_global_public_params(){
     return;
 }
 
-void set_public_param_transmission_buffer(){
+void set_public_param_transmission_struct(){
     // set struct params param for C-NodeJS I/O
 
     char * g_string = malloc(ELEMENT_STRING_LENGTH);
@@ -71,7 +71,7 @@ void set_public_param_transmission_buffer(){
 void setup_with_param_buffer(char * par_param_buffer, int len){
     pairing_init_set_buf(p, par_param_buffer, len);
     init_global_public_params();
-    set_public_param_transmission_buffer();
+    set_public_param_transmission_struct();
 }
 
 char * extract_pairing_param_buffer_from_file(){
@@ -130,9 +130,9 @@ void FreeElements(pairing_t p){
 }
 
 char * simpleSHA256(const unsigned char * message, int len){
-    char * hash = malloc(SHA256_DIGEST_LENGTH+1);
+    unsigned char * hash = malloc(SHA256_DIGEST_LENGTH+1);
     SHA256(message, len, hash);
-    return hash;
+    return (char *) hash;
 }
 
 char * string_times_G2_to_Zr_SHA256(const unsigned char * message, element_t r){
