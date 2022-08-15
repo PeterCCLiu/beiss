@@ -31,15 +31,17 @@ element_t P0; // P0
  * Use only basic data structures, since it needs I/O
  */
 struct params {
+    // PICK UP FROM HERE: make sure these are all necessary params, and marshall them for transmission
     char par_param_buffer[PARAM_BUFFER_LENGTH_TYPE_A];
     char g[QBITS];
-    char P0[QBITS]; // masterPubKey
-};
+    char P0[QBITS]; // also is masterPubKey
+} param;
 
 void setup(pairing_t p, pbc_param_t par);
 void setup_with_param_buffer(pairing_t p, char * par_param_buffer, int len);
 void init_test(pairing_t p);
 void FreeElements(pairing_t p);
-char * extract_pairing_param_buffer();
+char * extract_pairing_param_buffer_from_file();
+char * marshall_all_params_to_buffer(pairing_t p, params param);
 
 #endif //PBC_SETUP_H

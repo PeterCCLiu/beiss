@@ -65,7 +65,7 @@ void setup_with_param_buffer(pairing_t p, char * par_param_buffer, int len){
     // master pub/priv keygen complete
 }
 
-char * extract_pairing_param_buffer(){
+char * extract_pairing_param_buffer_from_file(){
     char * par_param_buffer = malloc(PARAM_BUFFER_LENGTH_TYPE_A);
     FILE *fp;
     fp = fopen("pairing_params.txt", "r");
