@@ -49,7 +49,8 @@ void init_global_public_params(){
     element_init_G1(P0, p);
     element_set(P0, masterPublicKey);
     // master pub/priv keygen complete
-    
+
+    return;
 }
 
 void set_public_param_transmission_buffer(){
@@ -59,6 +60,8 @@ void set_public_param_transmission_buffer(){
     char * P0_string = malloc(ELEMENT_STRING_LENGTH);
     element_snprint(g_string, ELEMENT_STRING_LENGTH, g);
     element_snprint(P0_string, ELEMENT_STRING_LENGTH, P0);
+
+    // UNSTABLE BUG: the size of element_string (element convert to string, like P0_string) is not stable.
 
     strcpy(param.par_param_buffer, par_param_buffer);
     strcpy(param.g, g_string);
@@ -84,7 +87,7 @@ char * extract_pairing_param_buffer_from_file(){
     return par_param_buffer;
 }
 
-void init_test(pairing_t p){
+void init_test(){
     // printf("Your length in bits to represent a G1 element is = %d\n", pairing_length_in_bytes_G1(p));
     printf("Is pairing is symmetric, 1 is symmetric? : %d\n", pairing_is_symmetric(p));
 
@@ -124,4 +127,37 @@ void FreeElements(pairing_t p){
     element_free(masterPrivateKey);
 
     pairing_clear(p);
+}
+
+char * simpleSHA256(const unsigned char * message, int len){
+    char * hash = malloc(SHA256_DIGEST_LENGTH+1);
+    SHA256(message, len, hash);
+    return hash;
+}
+
+char * string_times_G2_to_Zr_SHA256(const unsigned char * message, element_t r){
+
+    char * r_string = malloc(ELEMENT_STRING_LENGTH);
+    element_snprint(r_string, ELEMENT_STRING_LENGTH, r);
+
+    unsigned char * hash = malloc(SHA256_DIGEST_LENGTH+1);
+    unsigned char * hash1 = malloc(SHA256_DIGEST_LENGTH+1);
+    unsigned char * hash2 = malloc(SHA256_DIGEST_LENGTH+1);
+
+    memset(hash, 0, SHA256_DIGEST_LENGTH+1);
+    memset(hash1, 0, SHA256_DIGEST_LENGTH+1);
+    memset(hash2, 0, SHA256_DIGEST_LENGTH+1);
+
+    SHA256((const unsigned char *) message, strlen((char *) message), hash1);
+    SHA256((const unsigned char *) r_string, strlen(r_string), hash2);
+
+    unsigned char * prehash = malloc(SHA256_DIGEST_LENGTH*2);
+    memset(prehash, 0, SHA256_DIGEST_LENGTH*2);
+
+    strcat((char *)prehash, (char *)hash1);
+    strcat((char *)prehash, (char *)hash2);
+
+    SHA256((const unsigned char *) (prehash), strlen((char *)prehash), hash);
+
+    return (char *) hash;
 }

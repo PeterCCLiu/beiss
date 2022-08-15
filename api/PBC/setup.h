@@ -15,7 +15,7 @@
 #define QBITS 512
 #define BITS 160
 #define ELEMENT_STRING_LENGTH 512 // In bytes, both G1, Zr, GT
-#define PARAM_BUFFER_LENGTH_TYPE_A 362 // empirically tested minimal buffer space to store a param string
+#define PARAM_BUFFER_LENGTH_TYPE_A 370 // empirically tested minimal buffer space to store a param string
 #define SIGNATURE_LENGTH 148 // 128+20
 #define DEBUG_MODE 0 // set to 1 to trigger debug mode and see my commented internal variable prints, TODO
 
@@ -45,9 +45,12 @@ void setup();
 void init_global_public_params();
 void set_public_param_transmission_buffer();
 void setup_with_param_buffer(char * par_param_buffer, int len);
-void init_test(pairing_t p);
+void init_test();
 void FreeElements(pairing_t p);
 char * extract_pairing_param_buffer_from_file();
+
+char * simpleSHA256(const unsigned char * message, int len);
+char * string_times_G2_to_Zr_SHA256(const unsigned char * message, element_t r);
 
 // char * marshall_all_params_to_buffer(struct params param);
 

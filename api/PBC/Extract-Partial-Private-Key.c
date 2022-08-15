@@ -206,57 +206,10 @@ char ** Sign(pairing_t p, char * message, char * SA_string){
 //    element_printf("Your aP is = %B\n", aP);
 //    element_printf("Your r is = %B\n", r);
 
-    char * r_string = malloc(ELEMENT_STRING_LENGTH); // length doesn't matter
-    element_snprint(r_string, ELEMENT_STRING_LENGTH, r);
-
-    unsigned char * hash = malloc(SHA256_DIGEST_LENGTH+1);
-    unsigned char * hash1 = malloc(SHA256_DIGEST_LENGTH+1);
-    unsigned char * hash2 = malloc(SHA256_DIGEST_LENGTH+1);
-
-    memset(hash, 0, SHA256_DIGEST_LENGTH+1);
-    memset(hash1, 0, SHA256_DIGEST_LENGTH+1);
-    memset(hash2, 0, SHA256_DIGEST_LENGTH+1);
-
-//    int message_strlen =  strlen(message);
-//    int r_strlen =  strlen(r_string);
-//
-//    printf("Your strlen(message) is = %d\n", message_strlen);
-//    printf("Your strlen(r_string) is = %d\n", r_strlen);
-
-    SHA256((const unsigned char *) message, strlen(message), hash1);
-    SHA256((const unsigned char *) r_string, strlen(r_string), hash2);
-
-//    puts(message);
-//    puts(r_string);
-//    puts("hash1 is");
-//    puts(hash1);
-//    puts("hash2 is");
-//    puts(hash2);
-//
-//    printf("Your strlen hash1 is = %d\n", strlen(hash1));
-//    printf("Your strlen hash2 is = %d\n", strlen(hash2));
-//
-
-    unsigned char * prehash = (unsigned char *) malloc(SHA256_DIGEST_LENGTH*2);
-    memset(prehash, 0, SHA256_DIGEST_LENGTH*2);
-
-    strcat((char *)prehash, (char *)hash1);
-    strcat((char *)prehash, (char *)hash2);
-
-//    puts("Your prehash after concatentation is: ");
-//    puts(prehash);
-
-//    printf("Your strlen of hash is = %lu\n", strlen((char *) hash));
-//    printf("Your strlen of prehash is = %lu\n", strlen((char *) prehash));
-
-    SHA256((const unsigned char *) (prehash), strlen((char *) prehash), hash);
-
-//    printf("Your strlen of hash is = %lu\n", strlen((char *) hash));
-
-    int hashlen = strlen((char *) hash);
+    char * hash = string_times_G2_to_Zr_SHA256((const unsigned char *) message, r);
 
     element_init_Zr(v, p);
-    element_from_hash(v, (const void *)hash, hashlen);
+    element_from_hash(v, (const void *)hash, SHA256_DIGEST_LENGTH);
 
     element_t U, U1, U2;
     element_init_G1(U, p);
@@ -325,12 +278,9 @@ int Verify(pairing_t p, char ** sig, char ** DevicePublicKey, char * message, ch
     element_init_GT(result3, p);
     element_init_G1(QA, p);
 
-    unsigned char * ID_hash = malloc(SHA256_DIGEST_LENGTH+1); // as verifier, one should use other person's ID and locally verify
-    memset(ID_hash, 0, SHA256_DIGEST_LENGTH+1);
+    char * ID_hash = simpleSHA256((const unsigned char *) ID, strlen(ID));
 
-    SHA256((const unsigned char *) ID, strlen(ID), ID_hash);
-    int hashlen = strlen((char *) ID_hash);
-    element_from_hash(QA, ID_hash, hashlen); // check if replaceable with SHA256_DIGEST_LENGTH
+    element_from_hash(QA, ID_hash, SHA256_DIGEST_LENGTH);
 
     element_t negYA;
     element_init_G1(negYA, p);
@@ -342,45 +292,11 @@ int Verify(pairing_t p, char ** sig, char ** DevicePublicKey, char * message, ch
 
     element_mul(r, result1, result3);
 
-    char * r_string = malloc(ELEMENT_STRING_LENGTH);
-    element_snprint(r_string, ELEMENT_STRING_LENGTH, r);
-
-    unsigned char * hash = malloc(SHA256_DIGEST_LENGTH+1);
-    unsigned char * hash1 = malloc(SHA256_DIGEST_LENGTH+1);
-    unsigned char * hash2 = malloc(SHA256_DIGEST_LENGTH+1);
-
-    memset(hash, 0, SHA256_DIGEST_LENGTH+1);
-    memset(hash1, 0, SHA256_DIGEST_LENGTH+1);
-    memset(hash2, 0, SHA256_DIGEST_LENGTH+1);
-
-    SHA256((const unsigned char *) message, strlen(message), hash1);
-    SHA256((const unsigned char *) r_string, strlen(r_string), hash2);
-
-//    printf("Your strlen hash1 is = %lu\n", strlen((char *)hash1));
-//    printf("Your strlen hash2 is = %lu\n", strlen((char *)hash2));
-
-    unsigned char * prehash = malloc(SHA256_DIGEST_LENGTH*2);
-    memset(prehash, 0, SHA256_DIGEST_LENGTH*2);
-
-    strcat((char *)prehash, (char *)hash1);
-    strcat((char *)prehash, (char *)hash2);
-
-    SHA256((const unsigned char *) (prehash), strlen((char *)prehash), hash);
-
-    hashlen = strlen((char *) hash);
-
-//    printf("Your strlen of prehash is = %lu\n", strlen((char *)prehash));
-//    puts(prehash);
-
-    SHA256((const unsigned char *) (prehash), strlen((char *)prehash), hash);
-
-//    printf("Your strlen of hash is = %lu\n", strlen((char *)hash));
-//    puts(hash);
-
+    char * hash = string_times_G2_to_Zr_SHA256(message, r);
 
     element_t v_canonical;
     element_init_Zr(v_canonical, p);
-    element_from_hash(v_canonical, (const void *)hash, hashlen);
+    element_from_hash(v_canonical, (const void *)hash, SHA256_DIGEST_LENGTH);
 
 //    element_printf("Your v_canonical is = %B\n", v_canonical);
 //    element_printf("Your v is = %B\n", v);
@@ -401,7 +317,7 @@ int main(){
 //    par_param_buffer = extract_pairing_param_buffer_from_file();
 //    setup_with_param_buffer(p, par_param_buffer, PARAM_BUFFER_LENGTH_TYPE_A);
 
-    init_test(p);
+    init_test();
 
     void * ID = "Peter_Liu"; // ID could be any string
 
@@ -484,7 +400,7 @@ int main(){
     return 0;
 }
 
-unsigned char * compress_signature_before_transmission(element_t sig){
-    unsigned char * a;
-    return a;
-}
+//unsigned char * compress_signature_before_transmission(element_t sig){
+//    unsigned char * a;
+//    return a;
+//}
