@@ -20,28 +20,35 @@
 #define DEBUG_MODE 0 // set to 1 to trigger debug mode and see my commented internal variable prints, TODO
 
 /*
- * Public params for global visibility
+ * Public params for global use (in local device or server)
+ * Initialized in this order
  */
 
+pairing_t p;
+pbc_param_t par;
+char * par_param_buffer;
 element_t g; // generator, also is P in Al-Riyami-Patterson03 paper
 element_t masterPublicKey, masterPrivateKey; // master priv/pub key
 element_t P0; // P0
 
 /*
- * Use only basic data structures, since it needs I/O
+ * Public params for transmission between device and server
  */
 struct params {
     // PICK UP FROM HERE: make sure these are all necessary params, and marshall them for transmission
     char par_param_buffer[PARAM_BUFFER_LENGTH_TYPE_A];
-    char g[QBITS];
-    char P0[QBITS]; // also is masterPubKey
+    char g[ELEMENT_STRING_LENGTH];
+    char P0[ELEMENT_STRING_LENGTH]; // also is masterPubKey
 } param;
 
-void setup(pairing_t p, pbc_param_t par);
-void setup_with_param_buffer(pairing_t p, char * par_param_buffer, int len);
+void setup();
+void init_global_public_params();
+void set_public_param_transmission_buffer();
+void setup_with_param_buffer(char * par_param_buffer, int len);
 void init_test(pairing_t p);
 void FreeElements(pairing_t p);
 char * extract_pairing_param_buffer_from_file();
-char * marshall_all_params_to_buffer(pairing_t p, params param);
+
+// char * marshall_all_params_to_buffer(struct params param);
 
 #endif //PBC_SETUP_H

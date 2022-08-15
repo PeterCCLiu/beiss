@@ -1,4 +1,4 @@
-test: Makefile Extract-Partial-Private-Key.c
+test: Extract-Partial-Private-Key.c
 	gcc -o test Extract-Partial-Private-Key.c setup.c -lpbc -lgmp -lcrypto
 clean:
 	-rm -rf test pairing_params.txt

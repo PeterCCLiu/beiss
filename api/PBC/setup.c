@@ -9,9 +9,9 @@
 
 // Generate params and master pub/priv keys
 
-void setup(pairing_t p, pbc_param_t par){
+void setup(){
 
-    // pairing param init
+    // First time pairing param init with NO inputs, server side only
     pbc_param_init_a_gen(par, RBITS ,QBITS); // Type A curve produces symmetric pairing, a necessity for Al-Riyami-Patterson03.
     pairing_init_pbc_param(p, par);
     if (!pairing_is_symmetric(p)) pbc_die("Al-Riyami-Patterson03 scheme requires a symmetric pairing, exiting.");
@@ -21,48 +21,54 @@ void setup(pairing_t p, pbc_param_t par){
      * pbc_param_init_f_gen(par, BITS);
      */
 
-    // pairing param output
+    // pairing param write to file (backup)
     FILE *fp;
     fp = fopen("pairing_params.txt", "wr+");
     pbc_param_out_str(fp, par);
     fclose(fp);
-    // pairing param init complete, check in pairing_params.txt
 
-    // generator init
-    element_init_G1(g, p);
-    element_random(g);
-    // generator init complete
+    par_param_buffer = extract_pairing_param_buffer_from_file();
+    init_global_public_params();
+    set_public_param_transmission_buffer();
 
-    // master pub/priv keygen
-    element_init_Zr(masterPrivateKey, p);
-    element_init_G1(masterPublicKey, p);
-
-    element_random(masterPrivateKey); // How to securely store this after deployment?
-    element_pow_zn(masterPublicKey, g, masterPrivateKey);
-
-    element_init_G1(P0, p);
-    element_set(P0, masterPublicKey);
-    // master pub/priv keygen complete
+    return;
 }
 
-void setup_with_param_buffer(pairing_t p, char * par_param_buffer, int len){
-    pairing_init_set_buf(p, par_param_buffer, len);
+void init_global_public_params(){
 
-    // generator init
+    // generator init, g is also P in Al-Riyami-Patterson03 paper
     element_init_G1(g, p);
     element_random(g);
-    // generator init complete
 
     // master pub/priv keygen
     element_init_Zr(masterPrivateKey, p);
     element_init_G1(masterPublicKey, p);
-
     element_random(masterPrivateKey); // How to securely store this after deployment?
     element_pow_zn(masterPublicKey, g, masterPrivateKey);
 
     element_init_G1(P0, p);
     element_set(P0, masterPublicKey);
     // master pub/priv keygen complete
+    
+}
+
+void set_public_param_transmission_buffer(){
+    // set struct params param for C-NodeJS I/O
+
+    char * g_string = malloc(ELEMENT_STRING_LENGTH);
+    char * P0_string = malloc(ELEMENT_STRING_LENGTH);
+    element_snprint(g_string, ELEMENT_STRING_LENGTH, g);
+    element_snprint(P0_string, ELEMENT_STRING_LENGTH, P0);
+
+    strcpy(param.par_param_buffer, par_param_buffer);
+    strcpy(param.g, g_string);
+    strcpy(param.P0, P0_string);
+}
+
+void setup_with_param_buffer(char * par_param_buffer, int len){
+    pairing_init_set_buf(p, par_param_buffer, len);
+    init_global_public_params();
+    set_public_param_transmission_buffer();
 }
 
 char * extract_pairing_param_buffer_from_file(){
