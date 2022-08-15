@@ -45,8 +45,8 @@ struct params {
 void setup();
 void init_global_public_params();
 void set_public_param_transmission_struct();
-void set_public_param_transmission_buffer();
-void get_public_param_transmission_buffer();
+void set_params_to_public_param_transmission_buffer();
+void set_public_param_transmission_buffer_to_params();
 void setup_with_param_buffer(char * par_param_buffer, int len);
 void init_test();
 void FreeElements(pairing_t p);

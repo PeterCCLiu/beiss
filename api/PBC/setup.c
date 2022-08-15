@@ -68,6 +68,18 @@ void set_public_param_transmission_struct(){
     strcpy(param.P0, P0_string);
 }
 
+void set_params_to_public_param_transmission_buffer(){
+    strcpy(public_param_transmission_buffer, param.par_param_buffer);
+    strcat(public_param_transmission_buffer, param.g);
+    strcat(public_param_transmission_buffer, param.P0);
+}
+
+void set_public_param_transmission_buffer_to_params(){
+    strncpy(param.par_param_buffer, public_param_transmission_buffer, PARAM_BUFFER_LENGTH_TYPE_A);
+    strncpy(param.g, public_param_transmission_buffer+PARAM_BUFFER_LENGTH_TYPE_A, ELEMENT_STRING_LENGTH);
+    strncpy(param.P0, public_param_transmission_buffer+PARAM_BUFFER_LENGTH_TYPE_A+ELEMENT_STRING_LENGTH, ELEMENT_STRING_LENGTH);
+}
+
 void setup_with_param_buffer(char * par_param_buffer, int len){
     pairing_init_set_buf(p, par_param_buffer, len);
     init_global_public_params();
