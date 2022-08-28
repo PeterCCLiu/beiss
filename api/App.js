@@ -41,8 +41,8 @@ app.get('/testWasm', (req, res) => {
 })
 
 app.use('/users', userRouter);
-app.use('/device', deviceRouter);
+app.use('/devices', deviceRouter);
 
-app.listen(4000, function () {
+app.listen(3000, function () {
     console.log('server started')
 });
