@@ -27,7 +27,7 @@
 pairing_t p;
 pbc_param_t par;
 char * par_param_buffer;
-char * public_param_transmission_buffer; // struct params param in byte buffer
+char public_param_transmission_buffer[PARAM_BUFFER_LENGTH_TYPE_A+ELEMENT_STRING_LENGTH+ELEMENT_STRING_LENGTH]=""; // struct params param in byte buffer
 element_t g; // generator, also is P in Al-Riyami-Patterson03 paper
 element_t masterPublicKey, masterPrivateKey; // master priv/pub key
 element_t P0; // P0
@@ -35,12 +35,13 @@ element_t P0; // P0
 /*
  * Public params for transmission between device and server
  */
-struct params {
+typedef struct {
     // PICK UP FROM HERE: make sure these are all necessary params, and marshall them for transmission
     char par_param_buffer[PARAM_BUFFER_LENGTH_TYPE_A];
     char g[ELEMENT_STRING_LENGTH];
     char P0[ELEMENT_STRING_LENGTH]; // also is masterPubKey
-} param;
+} params;
+params param;
 
 void setup();
 void init_global_public_params();
