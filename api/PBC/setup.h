@@ -3,7 +3,7 @@
 //
 #ifndef PBC_SETUP_H
 #define PBC_SETUP_H
-#include "../../pbc/include/pbc.h"
+#include <pbc/pbc.h>
 
 /*
  * RBITS is the modulo of the ring Zr, secret key length in bits
