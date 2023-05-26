@@ -2,7 +2,9 @@
 // Created by PL on 2022/8/2.
 // Based on Boneh-Franklin03 and Al-Riyami-Patterson03.
 //
-#include "../../pbc/include/pbc.h"
+//#include <emscripten.h>
+//#include "../../pbc/include/pbc.h"
+#include <pbc/pbc.h>
 #include "string.h"
 #include "setup.h"
 #include <openssl/sha.h>
@@ -172,4 +174,8 @@ char * string_times_G2_to_Zr_SHA256(const unsigned char * message, element_t r){
     SHA256((const unsigned char *) (prehash), strlen((char *)prehash), hash);
 
     return (char *) hash;
+}
+
+char * reader(){
+    return public_param_transmission_buffer;
 }

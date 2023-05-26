@@ -1,4 +1,0 @@
-[submodule "pbc"]
-	path = pbc
-	url = git@github.com:blynn/pbc.git
-	branch = master
